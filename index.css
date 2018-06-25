@@ -1,0 +1,66 @@
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+	width: 100%;
+	color: #F9FAF9;
+
+}
+
+header {
+	background-color: #264653;
+}
+
+header h1 {
+	color: #F87060;
+	font-family: 'Lobster', cursive;
+	font-size: 2em;
+	padding-left: 15px;
+}
+
+.city-info-results {
+	background-color: #253853;
+}
+
+.js-weather-results {
+	background-color: #384A62;
+}
+.js-events-results {
+	background-color: #F87060;
+}
+
+
+.container {
+	margin: 0 auto;
+	
+}
+.column-full {
+	width: 100%;
+}
+
+.column-two-thirds {
+	width: 66.7%; 
+}
+
+.column-half {
+	width: 50%; 
+}
+
+.column-third {
+	width: 33.3%; 
+}
+
+.column-fourth {
+	width: 25%; 
+}
+
+/*
+#102542 - Yankees Blue
+#253853 - Japanese INdigo 
+#384A62 - Charcoal
+#F87060 - Bittersweet
+#F9FAF9 - Snow (for text) 
+*/
