@@ -1,10 +1,13 @@
 // URL endpoints for APIs
 const OPENWEATHERMAP_SEARCH_URL = 'https://api.openweathermap.org/data/2.5/forecast';
-
 const TICKETMASTER_SEARCH_URL = 'https://app.ticketmaster.com/discovery/v2/events.json';
 
+let weatherObject;
+let userCity;
 
+// API GET functions
 function getDataFromWeatherApi(city,callback) {
+  // console.log(userCity);
   query = {
     apikey: '91308079cdcfca1bf0b4e6b74e0d6a7d',
     q: `${city}`,
@@ -24,49 +27,87 @@ function getDataFromTicketmasterApi(city,callback) {
 
 // callback functions 
 function displayOpenWeatherMap(data) {
-  // renderResult(data);
   console.log('displayOpenWeatherMap is working');
-  $('.js-weather-results').html(renderWeatherResult(data));
+  $('.js-current-weather-result').html(renderWeatherResult(data));
+  const results = (getThreeAndNineTime(data)).map((item) => renderDatesandHour(item));
+  $('.js-search-form').hide();
+  $('.city-info-results').html(`${userCity}`);
+  $('.js-weather-results').html(results);
 }
 
 function displayTicketmaster(data) {
-  // renderResult(data);
   console.log('displayTicketmaster is working');
-  $('.js-events-results').html(renderTicketmasterResult(data));
+  const results = data._embedded.events.map((item) => renderTicketmasterResult(item));
+  $('.js-events-results').html(results);
 }
 
 
-// functions that create HTML to be appended
+// functions that render HTML to be appended
 function renderWeatherResult(result) {
   console.log('renderWeatherResult is working');
-  console.log(result);
   return `
   <div>
-  <p>${result.list[0].main.temp}</p>
+  <p>The current weather in ${userCity} is ${result.list[0].main.temp}</p>
+  <div>Choose a date and time below<div>
   </div>`
   ;
+}
+
+function renderDatesandHour(result) {
+  console.log('renderDatesandHour is working');
+  return `
+  <div class="single-event" >
+    <p>${result.main.temp}F on ${getDate(result.dt_txt)} at ${getHours(result.dt_txt)}</p>
+  </div>
+  `;
 }
 
 function renderTicketmasterResult(result) {
   console.log('renderTickermasterResult is working');
-  console.log(result);
   return `
-  <div>
-  <p>${result._embedded.events[0].name}</p>
+  <div class='column-fourth' class='result-events'>
+  <p>${result.name}</p>
   </div>`
   ;
 }
 
 
-// main function 
+//other functions
+function getThreeAndNineTime(result) {
+  console.log('getThreeAndNineTime is working');
+  const dates = result.list.filter(weatherItem => { 
+    return getHours(weatherItem.dt_txt)=="09:00:00" || getHours(weatherItem.dt_txt)=="15:00:00" || getHours(weatherItem.dt_txt)=="21:00:00" ;
+  });
+  return dates;
+}
+
+function getDate(str) {
+  return str.split(' ')[0];
+}
+
+function getHours(str) {
+  return str.split(' ')[1];
+}
+
+
+// event handler functions 
+function clickEvent() {
+// will have JQuery selector on the single events
+//
+}
+
+
 function watchSubmit() {
   $('.js-search-form').submit(event => {
     event.preventDefault();
     const queryTarget = $(event.currentTarget).find('.js-query');
     const query = queryTarget.val();
-    queryTarget.val('')
+    queryTarget.val('');
+    console.log(query);
+    let userCity = query;
+    console.log(userCity);
     getDataFromWeatherApi(query, displayOpenWeatherMap);
-    getDataFromTicketmasterApi(query, displayTicketmaster)
+    // getDataFromTicketmasterApi(query, displayTicketmaster)
   });
   console.log('watchSubmit is working');
 }
