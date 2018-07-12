@@ -7,7 +7,6 @@
 body {
 	width: 100%;
 	color: #F9FAF9;
-
 }
 
 header {
@@ -21,10 +20,16 @@ header h1 {
 	padding-left: 15px;
 }
 
-.city-info-results {
+form {
+  color: #F87060;
+  background-color: #253853;  
+}
+
+.city-result {
 	background-color: #253853;
 }
 
+.js-current-weather-result, 
 .js-weather-results {
 	background-color: #384A62;
 }

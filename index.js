@@ -11,6 +11,7 @@ function getDataFromWeatherApi(city,callback) {
   query = {
     apikey: '91308079cdcfca1bf0b4e6b74e0d6a7d',
     q: `${city}`,
+    units: 'imperial'
   }
   $.getJSON(OPENWEATHERMAP_SEARCH_URL, query, callback);
 }
@@ -31,12 +32,13 @@ function displayOpenWeatherMap(data) {
   $('.js-current-weather-result').html(renderWeatherResult(data));
   const results = (getThreeAndNineTime(data)).map((item) => renderDatesandHour(item));
   $('.js-search-form').hide();
-  $('.city-info-results').html(`${userCity}`);
+  $('.city-result').html((`${userCity}`).toUpperCase());
   $('.js-weather-results').html(results);
 }
 
 function displayTicketmaster(data) {
   console.log('displayTicketmaster is working');
+  console.log(data);
   const results = data._embedded.events.map((item) => renderTicketmasterResult(item));
   $('.js-events-results').html(results);
 }
@@ -47,7 +49,7 @@ function renderWeatherResult(result) {
   console.log('renderWeatherResult is working');
   return `
   <div>
-  <p>The current weather in ${userCity} is ${result.list[0].main.temp}</p>
+  <p>The current weather is ${result.list[0].main.temp}°F</p>
   <div>Choose a date and time below<div>
   </div>`
   ;
@@ -56,8 +58,8 @@ function renderWeatherResult(result) {
 function renderDatesandHour(result) {
   console.log('renderDatesandHour is working');
   return `
-  <div class="single-event" >
-    <p>${result.main.temp}F on ${getDate(result.dt_txt)} at ${getHours(result.dt_txt)}</p>
+  <div class="single-event-detail" >
+    <p>${result.main.temp}°F on ${getDate(result.dt_txt)} ${timeConverter(getHours(result.dt_txt))}</p>
   </div>
   `;
 }
@@ -76,10 +78,22 @@ function renderTicketmasterResult(result) {
 function getThreeAndNineTime(result) {
   console.log('getThreeAndNineTime is working');
   const dates = result.list.filter(weatherItem => { 
-    return getHours(weatherItem.dt_txt)=="09:00:00" || getHours(weatherItem.dt_txt)=="15:00:00" || getHours(weatherItem.dt_txt)=="21:00:00" ;
+    return getHours(weatherItem.dt_txt)=="09:00:00" || getHours(weatherItem.dt_txt)=="15:00:00" || getHours(weatherItem.dt_txt)=="21:00:00";
   });
   return dates;
 }
+
+function timeConverter(time) {
+  if (time === "09:00:00") {
+    return "in the morning"
+  } else if (time === "15:00:00") {
+    return "in the afternoon"
+  } else {
+    return "at night"
+  }
+}
+
+
 
 function getDate(str) {
   return str.split(' ')[0];
@@ -88,6 +102,22 @@ function getDate(str) {
 function getHours(str) {
   return str.split(' ')[1];
 }
+
+
+function displayDayEvents() {
+  // display all events on a single day
+  // 
+}
+
+function filterEventsByWeather() {
+  // 
+   
+}
+
+
+
+
+
 
 
 // event handler functions 
@@ -104,7 +134,7 @@ function watchSubmit() {
     const query = queryTarget.val();
     queryTarget.val('');
     console.log(query);
-    let userCity = query;
+    userCity = query;
     console.log(userCity);
     getDataFromWeatherApi(query, displayOpenWeatherMap);
     // getDataFromTicketmasterApi(query, displayTicketmaster)
