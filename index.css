@@ -10,19 +10,24 @@ body {
 }
 
 header {
-	background-color: #264653;
+	background-color: #0A1726;
 }
 
 header h1 {
-	color: #F87060;
-	font-family: 'Lobster', cursive;
+	color: #FA746F;
+	font-family: 'Comfortaa', cursive;
 	font-size: 2em;
-	padding-left: 15px;
+	padding: 10px 0 10px 15px ;
 }
 
 form {
-  color: #F87060;
-  background-color: #253853;  
+  color: #FA746F;
+  background-color: #0D1D32;  
+}
+
+
+.intro-message {
+	background-color: #0B1829;
 }
 
 .city-result {
@@ -30,18 +35,29 @@ form {
 }
 
 .js-current-weather-result, 
-.js-weather-results {
-	background-color: #384A62;
+.js-weather-results,
+.city-result {
+	background-color: #0B1829;
 }
 .js-events-results {
 	background-color: #F87060;
 }
 
 
+.js-weather-results {
+	display: block;
+}
+
 .container {
 	margin: 0 auto;
 	
 }
+
+
+
+
+
+
 .column-full {
 	width: 100%;
 }
