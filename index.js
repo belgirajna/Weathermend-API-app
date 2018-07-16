@@ -39,7 +39,6 @@ function displayOpenWeatherMap(data) {
 
 function displayTicketmaster(data) {
   console.log('displayTicketmaster is working');
-  console.log(data);
   const results = data._embedded.events.map((item) => renderTicketmasterResult(item));
   $('.js-events-results').html(results);
 }
@@ -48,6 +47,7 @@ function displayTicketmaster(data) {
 // functions that render HTML block or single lines
 function renderWeatherResult(result) {
   console.log('renderWeatherResult is working');
+
   return `
   <div>
   <p>The current weather is ${result.list[0].main.temp}°F</p>
@@ -58,9 +58,10 @@ function renderWeatherResult(result) {
 
 function renderDatesandHour(result) {
   console.log('renderDatesandHour is working');
+  console.log(result);
   userTemp = result.main.temp;
   return `
-  <div class="single-day-detail" >
+  <div class="single-day-detail" data-temp="${userTemp}">
     <p>${getDate(result.dt_txt)} ${timeConverter(getHours(result.dt_txt))}</p>
   </div>
   `;
@@ -68,14 +69,15 @@ function renderDatesandHour(result) {
 
 function renderTicketmasterResult(result) {
   console.log('renderTickermasterResult is working');
-  console.log(result.url);
   return `
-  <a href=${result.url}>
-  <div class='column-fourth' class='result-events'><p>${result.name}</p>
-  </div>
+  <a href=${result.url} target='_blank'>
+  <div class='column-fourth' class='result-events'>
+    <p>${result.name}</p>
   </div></a>`
   ;
 }
+
+
 
 function renderTempExpression(temp) {
   if (temp <= 16) {
@@ -137,6 +139,8 @@ $('.js-weather-results').on('click','.single-day-detail',function() {
   $('.js-current-weather-result').hide();
   $('.js-weather-results').html(this);
   console.log(this);
+  let temp = $(this).data("temp");
+  $('.js-weather-message').html(renderTempExpression(temp));
   getDataFromTicketmasterApi(userCity, displayTicketmaster);
 });
 }

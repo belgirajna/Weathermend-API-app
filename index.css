@@ -11,23 +11,26 @@ body {
 
 header {
 	background-color: #0A1726;
+	margin: 0;
 }
 
 header h1 {
 	color: #FA746F;
 	font-family: 'Comfortaa', cursive;
 	font-size: 2em;
-	padding: 10px 0 10px 15px ;
+	padding: 10px 0 10px 15px;
 }
 
 form {
   color: #FA746F;
-  background-color: #0D1D32;  
+  background-color: #0D1D32; 
+  padding: 10px; 
 }
 
 
 .intro-message {
 	background-color: #0B1829;
+	padding: 10px;
 }
 
 .city-result {
@@ -36,7 +39,8 @@ form {
 
 .js-current-weather-result, 
 .js-weather-results,
-.city-result {
+.city-result,
+.js-weather-message {
 	background-color: #0B1829;
 }
 .js-events-results {
