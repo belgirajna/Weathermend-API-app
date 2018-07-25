@@ -2,9 +2,12 @@
 const OPENWEATHERMAP_SEARCH_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 const TICKETMASTER_SEARCH_URL = 'https://app.ticketmaster.com/discovery/v2/events.json';
 
+// Global variables 
 let weatherObject;
 let userCity;
 let userTemp;
+let chosenTemp;
+let chosenDate;
 
 
 // API GET functions
@@ -17,11 +20,12 @@ function getDataFromWeatherApi(city,callback) {
   $.getJSON(OPENWEATHERMAP_SEARCH_URL, query, callback);
 }
 
+
 function getDataFromTicketmasterApi(city,callback) {
   query = {
     apikey: 'ku9Z9ArGjW4QZRSdJoirA3mpsNKHLh6G',
     city: `${city}`,
-    size: 30
+    size: 40
   }
   $.getJSON(TICKETMASTER_SEARCH_URL, query, callback);
 }
@@ -33,50 +37,59 @@ function displayOpenWeatherMap(data) {
   $('.js-current-weather-result').html(renderWeatherResult(data));
   const results = (getThreeAndNineTime(data)).map((item) => renderDatesandHour(item));
   $('.js-search-form').hide();
-  $('.city-result').html((`${userCity}`).toUpperCase());
+  $('.city-result').html((`${userCity.toUpperCase()} <a class="different-city-text" href="index.html"><div>or try a different city</div></a>`));
   $('.js-weather-results').html(results);
 }
 
+
 function displayTicketmaster(data) {
   console.log('displayTicketmaster is working');
-  const results = data._embedded.events.map((item) => renderTicketmasterResult(item));
-  $('.js-events-results').html(results);
+  const filterEvents = filterEventsforChosenDate(chosenDate,data._embedded.events);
+  if (filterEvents.length > 0) {
+    const results = filterEvents.map((item) => renderTicketmasterResult(item));
+    $('.js-events-results').html(results);
+  } else {
+    const noEvent =`
+    <div>
+    <p>Sorry, we couldn't find any events that match that criteria</p>
+    </div>`;
+    $('.js-events-results').html(noEvent);
+  }
 }
 
 
-// functions that render HTML block or single lines
+// functions that render HTML 
 function renderWeatherResult(result) {
   console.log('renderWeatherResult is working');
-
   return `
-  <div>
-  <p>The current weather is ${result.list[0].main.temp}°F</p>
-  <div>Choose a date and time below<div>
-  </div>`
+  <div class="current-temp">
+  The current weather is ${result.list[0].main.temp}°F. Choose a date and time below.
+  </div>
+  <div>`
   ;
 }
 
+
 function renderDatesandHour(result) {
   console.log('renderDatesandHour is working');
-  console.log(result);
   userTemp = result.main.temp;
+  console.log(result);
   return `
-  <div class="single-day-detail" data-temp="${userTemp}">
-    <p>${getDate(result.dt_txt)} ${timeConverter(getHours(result.dt_txt))}</p>
+  <div class="single-day-detail" data-temp="${userTemp}" data-date="${getDate(result.dt_txt)}"><span class="single-day-date">${getDate(result.dt_txt)}</span> ${timeConverter(getHours(result.dt_txt))}
   </div>
   `;
 }
 
+
 function renderTicketmasterResult(result) {
   console.log('renderTickermasterResult is working');
-  return `
-  <a href=${result.url} target='_blank'>
-  <div class='column-fourth' class='result-events'>
-    <p>${result.name}</p>
-  </div></a>`
-  ;
+  console.log(result);
+    return `
+    <a href=${result.url} target='_blank'>
+    <div class='event-result' class='column-fourth'> ${result.name}
+    <img class="event-result-image" src="${result.images[0].url}">
+    </div></a>`;
 }
-
 
 
 function renderTempExpression(temp) {
@@ -107,6 +120,7 @@ function getThreeAndNineTime(result) {
   return dates;
 }
 
+
 function timeConverter(time) {
   if (time == "09:00:00") {
     return "in the morning"
@@ -117,35 +131,28 @@ function timeConverter(time) {
   }
 }
 
+
 function getDate(str) {
   return str.split(' ')[0];
 }
+
 
 function getHours(str) {
   return str.split(' ')[1];
 }
 
-// main function of the app 
-function filterEventsforChosenDate(temp) {
-  // display all events on a single day
-  // 
+
+// must pass entire events object
+function filterEventsforChosenDate(date,events) {
+  console.log('filterEventsforChosenDate is working')
+  return events.filter((event) => {
+    // console.log(event.dates.start.localDate, date);
+    return date == event.dates.start.localDate;
+  })
 }
 
 
 // event handler functions 
-function chooseDate() {
-console.log('chooseDate is working');
-$('.js-weather-results').on('click','.single-day-detail',function() {
-  $('.js-current-weather-result').hide();
-  $('.js-weather-results').html(this);
-  console.log(this);
-  let temp = $(this).data("temp");
-  $('.js-weather-message').html(renderTempExpression(temp));
-  getDataFromTicketmasterApi(userCity, displayTicketmaster);
-});
-}
-
-
 function watchSubmit() {
   $('.js-search-form').submit(event => {
     event.preventDefault();
@@ -154,10 +161,23 @@ function watchSubmit() {
     queryTarget.val('');
     userCity = query;
     $('.intro-message').hide();
+    $('.intro-image').hide();
     getDataFromWeatherApi(query, displayOpenWeatherMap);
-    // getDataFromTicketmasterApi(query, displayTicketmaster);
   });
   console.log('watchSubmit is working');
+}
+
+
+function chooseDate() {
+console.log('chooseDate is working');
+$('.js-weather-results').on('click','.single-day-detail',function() {
+  $('.js-current-weather-result').hide();
+  $('.js-weather-results').html(this);
+  chosenTemp = $(this).data("temp");
+  chosenDate = $(this).data("date");
+  $('.js-weather-message').html(renderTempExpression(chosenTemp));
+  getDataFromTicketmasterApi(userCity, displayTicketmaster);
+});
 }
 
 
@@ -168,3 +188,6 @@ function handleWeathermendApp() {
 }
 
 $(handleWeathermendApp);
+
+
+

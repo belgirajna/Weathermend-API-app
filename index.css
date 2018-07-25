@@ -5,36 +5,56 @@
 }
 
 body {
-	width: 100%;
 	color: #F9FAF9;
+	background-image: url('https://hdqwalls.com/download/minimalist-beach-boat-mountains-sunset-birds-8k-db-1920x1080.jpg');
 }
 
 header {
 	background-color: #0A1726;
-	margin: 0;
+	margin: 0 auto;
 }
 
 header h1 {
 	color: #FA746F;
 	font-family: 'Comfortaa', cursive;
 	font-size: 2em;
-	padding: 10px 0 10px 15px;
+	padding: 20px 0 10px 15px;
+	margin: 0 auto;
 }
 
 form {
   color: #FA746F;
   background-color: #0D1D32; 
-  padding: 10px; 
+  font-family: 'Comfortaa', cursive;
+  padding: 10px 0 20px 15px; 
 }
 
+img {
+	max-width: 100%;	
+}
+
+footer {
+	position: fixed;
+	bottom: 15px; 
+	left: 15px;
+}
 
 .intro-message {
 	background-color: #0B1829;
-	padding: 10px;
+	padding: 5px 0 5px 15px;
 }
 
 .city-result {
 	background-color: #253853;
+	color: #FA746F;
+	padding: 0 0 10px 15px;
+	margin: 0	0;
+}
+
+.current-temp {
+	margin: 0 0;
+	padding: 10px 10px 10px 15px;
+	text-align: center;
 }
 
 .js-current-weather-result, 
@@ -43,8 +63,17 @@ form {
 .js-weather-message {
 	background-color: #0B1829;
 }
+
 .js-events-results {
 	background-color: #F87060;
+	margin: 0 auto;
+}
+
+.event-result {
+	margin-top: 0 auto;
+	padding-left: 15px;
+	text-align: center;
+	width: 25%
 }
 
 
@@ -52,40 +81,53 @@ form {
 	display: block;
 }
 
+
+.js-weather-message {
+	font-size: 1.5em;
+	padding: 0 0 20px 15px;
+}
+
+.single-day-detail {
+	display: inline-block;
+	margin: 10px 15px;
+	width: calc(33.33% - 40px); 
+	font-size: 1.2em;
+}
+
+.single-day-date {
+	color: #FA746F;
+}
+
+.different-city-text {
+	color: #FA746F;
+	text-decoration: underline;
+}
+
 .container {
 	margin: 0 auto;
 	
 }
 
-
-
-
+.column-third {
+	width: 33.33%;
+}
 
 
 .column-full {
 	width: 100%;
 }
 
+
 .column-two-thirds {
 	width: 66.7%; 
 }
 
+
 .column-half {
 	width: 50%; 
-}
-
-.column-third {
-	width: 33.3%; 
 }
 
 .column-fourth {
 	width: 25%; 
 }
 
-/*
-#102542 - Yankees Blue
-#253853 - Japanese INdigo 
-#384A62 - Charcoal
-#F87060 - Bittersweet
-#F9FAF9 - Snow (for text) 
-*/
